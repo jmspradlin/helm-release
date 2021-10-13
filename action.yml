@@ -9,10 +9,6 @@ inputs:
     description: ''
     required: true
     default: "example-golang-webapp"
-  CHART_VERSION: 
-    description: ''
-    required: true
-    default: "0.0.1"
   ACTION:
     description: 'Acceptable values: deploy/promote/reject. Promote or reject actions are used to promote or reject canary/blue-green deployments.'
     required: true
@@ -28,6 +24,7 @@ runs:
       with:
         namespace: '${{ inputs.K8S_NAMESPACE }}'
         action: ${{ inputs.ACTION }}
+        manifests: ''
         strategy: canary
         percentage: 50
-        images: ${{ inputs.HELM_CHART }}:${{ inputs.CHART_VERSION }}
+        images: ${{ inputs.HELM_CHART }}
