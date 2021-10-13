@@ -33,4 +33,4 @@ runs:
           service.yaml
         strategy: canary
         percentage: 50
-        chart: ${{ inputs.HELM_CHART }}:${{ inputs.CHART_VERSION }}
+        images: ${{ inputs.HELM_CHART }}:${{ inputs.CHART_VERSION }}
