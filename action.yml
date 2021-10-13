@@ -28,9 +28,6 @@ runs:
       with:
         namespace: '${{ inputs.K8S_NAMESPACE }}'
         action: ${{ inputs.ACTION }}
-        manifests: |
-          deployment.yaml
-          service.yaml
         strategy: canary
         percentage: 50
         images: ${{ inputs.HELM_CHART }}:${{ inputs.CHART_VERSION }}
