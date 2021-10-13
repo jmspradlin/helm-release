@@ -28,7 +28,7 @@ runs:
       uses: actions/checkout@v1
 
     - name: Helm Deploy to AKS
-      uses: deliverybot/helm@v1.5.0
+      uses: deliverybot/helm@master
       with:
         release: '${{ inputs.HELM_RELEASE_NAME }}'
         namespace: '${{ inputs.K8S_NAMESPACE }}'
