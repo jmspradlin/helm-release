@@ -33,7 +33,7 @@ runs:
         release: '${{ inputs.HELM_RELEASE_NAME }}'
         namespace: '${{ inputs.K8S_NAMESPACE }}'
         chart: '${{ inputs.HELM_CHART }}'
-        chart_version: '${{ inputs.CHART_VERSION }}'
+        version: '${{ inputs.CHART_VERSION }}'
         # repo: 'http://${{ inputs.ACR_NAME }}.azurecr.io'
         # repo-alias: '${{ inputs.ACR_NAME }}'
         # values: |
