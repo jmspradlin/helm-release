@@ -1,6 +1,10 @@
 name: Helm Release Pipeline
 description: Default template for helm releases to azure aks
 inputs:
+  ACR_NAME:
+    description: ''
+    required: true
+    default: "helmdeploy"
   HELM_RELEASE_NAME: 
     description: ''
     required: true
@@ -30,5 +34,7 @@ runs:
         namespace: '${{ inputs.K8S_NAMESPACE }}'
         chart: '${{ inputs.HELM_CHART }}'
         chart_version: '${{ inputs.CHART_VERSION }}'
-        repo: 'http://${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io'
-        repo-alias: '${{ steps.getKvSecrets.outputs.acrName }}'
+        # repo: 'http://${{ inputs.ACR_NAME }}.azurecr.io'
+        # repo-alias: '${{ inputs.ACR_NAME }}'
+        # values: |
+        #   image.repository: ${{ inputs.ACR_NAME }}.azurecr.io/${{ inputs.HELM_CHART }}
