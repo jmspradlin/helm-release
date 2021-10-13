@@ -1,0 +1,34 @@
+name: Helm Release Pipeline
+description: Default template for helm releases to azure aks
+inputs:
+  HELM_RELEASE_NAME: 
+    description: ''
+    required: true
+    default: "example-golang-webapp"
+  K8S_NAMESPACE: 
+    description: ''
+    required: true
+    default: "default"
+  HELM_CHART: 
+    description: ''
+    required: true
+    default: "example-golang-webapp"
+  CHART_VERSION: 
+    description: ''
+    required: true
+    default: "0.0.1"
+runs:
+  using: "composite"
+  steps:
+    - name: Check out code
+      uses: actions/checkout@v1
+
+    - name: Helm Deploy to AKS
+      uses: deliverybot/helm@v1
+      with:
+        release: '${{ inputs.HELM_RELEASE_NAME }}'
+        namespace: '${{ inputs.K8S_NAMESPACE }}'
+        chart: '${{ inputs.HELM_CHART }}'
+        chart_version: '${{ inputs.CHART_VERSION }}'
+        repo: 'http://${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io'
+        repo-alias: '${{ steps.getKvSecrets.outputs.acrName }}'
