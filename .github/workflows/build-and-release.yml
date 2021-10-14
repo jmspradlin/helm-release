@@ -80,6 +80,10 @@ jobs:
       # - name: Deploy to AKS
       #   run: make deploy targets=${{ env.DEPLOYMENT_PATH }}
 
+      - name: Change Chart version
+        run: |
+          	sed -i "s/^version:.*$$/version: ${{ env.TAG }}/" helm/chart/Chart.yaml && sed -i "s/^appVersion:.*$$/appVersion: ${{ env.TAG }}/" helm/chart/Chart.yaml
+
       # # Save chart
       - name: Save Helm chart
         run: |
