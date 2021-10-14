@@ -39,6 +39,7 @@ jobs:
         with:
           repository: ${{ env.REPO }}
           path: deployment
+          token: ${{ secrets.GHA_PAT }}
 
       # Install Helm
       - name: Setup Helm
