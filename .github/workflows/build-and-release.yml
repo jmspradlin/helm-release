@@ -82,8 +82,8 @@ jobs:
 
       - name: Change Chart version
         run: |
-          	sed -i "s/^version:.*$$/version: ${{ env.TAG }}/" deployment/helm/chart/Chart.yaml 
-            sed -i "s/^appVersion:.*$$/appVersion: ${{ env.TAG }}/" deployment/helm/chart/Chart.yaml
+          sed -i "s/^version:.*$$/version: ${{ env.TAG }}/" deployment/helm/chart/Chart.yaml 
+          sed -i "s/^appVersion:.*$$/appVersion: ${{ env.TAG }}/" deployment/helm/chart/Chart.yaml
 
       # # Save chart
       - name: Save Helm chart
