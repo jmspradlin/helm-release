@@ -12,7 +12,7 @@ env:
   AKS_RESOURCE_GROUP: aks_group
   APP_NAME: example-golang-webapp
   TAG: v0.0.3
-  # REPO: jmspradlin/example-golang-webapp
+  REPO: jmspradlin/example-golang-webapp
   # DEPLOYMENT_PATH: deployment/silly-goose/kube-system/* deployment/silly-goose/default/*
 
 on:
@@ -34,11 +34,11 @@ jobs:
       - name: Check out helm-release
         uses: actions/checkout@v1
 
-      # - name: Check out deployment code
-      #   uses: actions/checkout@v2
-      #   with:
-      #     repository: ${{ env.REPO }}
-      #     path: deployment
+      - name: Check out deployment code
+        uses: actions/checkout@v2
+        with:
+          repository: ${{ env.REPO }}
+          path: deployment
 
       # Install Helm
       - name: Setup Helm
@@ -79,8 +79,13 @@ jobs:
       # - name: Deploy to AKS
       #   run: make deploy targets=${{ env.DEPLOYMENT_PATH }}
 
+      # Save chart
+      - name: Save Helm chart
+        run: |
+          helm chart save ./deployment/helm/chart/ ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ env.TAG }}
+
       # Export chart
-      - name: Export chart
+      - name: Export Helm chart
         run: |
           helm chart export ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ env.TAG }} --destination ./deploy
 
