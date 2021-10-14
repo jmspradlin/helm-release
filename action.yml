@@ -24,7 +24,7 @@ runs:
       with:
         namespace: '${{ inputs.K8S_NAMESPACE }}'
         action: ${{ inputs.ACTION }}
-        manifests: ''
+        manifests: 
         strategy: canary
         percentage: 50
         images: ${{ inputs.HELM_CHART }}
