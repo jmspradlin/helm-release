@@ -84,6 +84,7 @@ jobs:
         run: |
           sed -i "s/^version:.*$$/version: ${{ env.TAG }}/" deployment/helm/chart/Chart.yaml 
           sed -i "s/^appVersion:.*$$/appVersion: ${{ env.TAG }}/" deployment/helm/chart/Chart.yaml
+          @echo
 
       # # Save chart
       - name: Save Helm chart
