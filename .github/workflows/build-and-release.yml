@@ -80,10 +80,10 @@ jobs:
       # - name: Deploy to AKS
       #   run: make deploy targets=${{ env.DEPLOYMENT_PATH }}
 
-      # Save chart
-      - name: Save Helm chart
-        run: |
-          helm chart save ./deployment/helm/chart/ ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ env.TAG }}
+      # # Save chart
+      # - name: Save Helm chart
+      #   run: |
+      #     helm chart save ./deployment/helm/chart/ ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ env.TAG }}
 
       # Export chart
       - name: Export Helm chart
