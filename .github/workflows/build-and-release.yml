@@ -1,0 +1,90 @@
+# Provide a hint to vscode yaml-language-server to use the right schema file
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json#
+name: Build and Release
+
+env:
+  HELM_EXPERIMENTAL_OCI: 1
+  HELM_VERSION_TO_INSTALL: 3.6.3
+  MAKEFILE_SKIP_AUTH: 1
+  KV_NAME: ltlkeyvault01
+  KV_SECRETS_NAME: 'acrName, acrClientID, acrCredential'
+  AKS_CLUSTER_NAME: aks01
+  AKS_RESOURCE_GROUP: aks_group
+  APP_NAME: example-golang-webapp
+  TAG: v0.0.3
+  # REPO: jmspradlin/example-golang-webapp
+  # DEPLOYMENT_PATH: deployment/silly-goose/kube-system/* deployment/silly-goose/default/*
+
+on:
+  push:
+    branches:
+      - main
+      - helm-releases-nonprod
+  release:
+    types:
+      - prereleased
+      - released
+
+jobs:
+  Core:
+    # https://github.com/actions/virtual-environments
+    runs-on: ubuntu-latest
+    environment: dev  
+    steps:
+      - name: Check out helm-release
+        uses: actions/checkout@v1
+
+      # - name: Check out deployment code
+      #   uses: actions/checkout@v2
+      #   with:
+      #     repository: ${{ env.REPO }}
+      #     path: deployment
+
+      # Install Helm
+      - name: Setup Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: ${{  env.HELM_VERSION_TO_INSTALL  }}
+        id: helmInstall
+      
+      # Azure login using env credentials
+      - name: Azure login
+        uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Get KV Secrets for this deployment
+      - name: Azure Key Vault Get Secrets
+        uses: Azure/get-keyvault-secrets@v1
+        with: 
+          keyvault: "${{ env.KV_NAME }}"
+          secrets: "${{ env.KV_SECRETS_NAME }}"
+        id: getKvSecrets
+
+      # Using KV Secrets, connect Helm to ACR
+      - name: Authenticate Helm to ACR
+        shell: bash
+        run: |
+          echo "${{ steps.getKvSecrets.outputs.acrCredential }}" | helm registry login ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io \
+          --username ${{ steps.getKvSecrets.outputs.acrClientID }} --password-stdin
+
+      # Setting AKS context for release
+      - name: Set AKS Context
+        uses: Azure/aks-set-context@v1
+        with:
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
+          cluster-name: ${{ env.AKS_CLUSTER_NAME }}
+          resource-group: ${{ env.AKS_RESOURCE_GROUP }}
+
+      # - name: Deploy to AKS
+      #   run: make deploy targets=${{ env.DEPLOYMENT_PATH }}
+
+      # Export chart
+      - name: Export chart
+        run: |
+          helm chart export ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ env.TAG }} --destination ./deploy
+
+      # Deploy to AKS cluster
+      - name: Deploy to AKS
+        run: |
+          helm upgrade --install ${{ env.APP_NAME }} ./deploy/${{ env.APP_NAME }}
