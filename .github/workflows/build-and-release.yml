@@ -77,15 +77,6 @@ jobs:
           cluster-name: ${{ env.AKS_CLUSTER_NAME }}
           resource-group: ${{ env.AKS_RESOURCE_GROUP }}
 
-      # - name: Deploy to AKS
-      #   run: make deploy targets=${{ env.DEPLOYMENT_PATH }}
-
-      - name: Change Chart version
-        run: |
-          sed -i "s/^version:.*$$/version: ${{ env.TAG }}/" deployment/helm/chart/Chart.yaml 
-          sed -i "s/^appVersion:.*$$/appVersion: ${{ env.TAG }}/" deployment/helm/chart/Chart.yaml
-          @echo
-
       # # Save chart
       - name: Save Helm chart
         run: |
