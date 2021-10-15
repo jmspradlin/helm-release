@@ -3,6 +3,7 @@
 name: Build and Release
 
 env:
+  ENVIRONMENT: PRD # Specifies the helm-release branch to deploy on
   HELM_EXPERIMENTAL_OCI: 1
   HELM_VERSION_TO_INSTALL: 3.6.3
   MAKEFILE_SKIP_AUTH: 1
@@ -32,6 +33,8 @@ jobs:
     steps:
       - name: Check out helm-release
         uses: actions/checkout@v1
+        with:
+          ref: ${{ env.ENVIRONMENT }}
 
       - name: Check out deployment code
         uses: actions/checkout@v2
