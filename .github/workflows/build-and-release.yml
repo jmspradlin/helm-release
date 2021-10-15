@@ -26,7 +26,7 @@ jobs:
   Core:
     # https://github.com/actions/virtual-environments
     runs-on: ubuntu-latest
-    environment: prod
+    environment: dev
     steps:
       - name: Check out helm-release
         uses: actions/checkout@v1
