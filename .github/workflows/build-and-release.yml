@@ -3,7 +3,7 @@
 name: Build and Release
 
 env:
-  ENVIRONMENT: dev
+  ENVIRONMENT: dev # Specifies the helm-release branch to deploy on
   HELM_EXPERIMENTAL_OCI: 1
   HELM_VERSION_TO_INSTALL: 3.6.3
   MAKEFILE_SKIP_AUTH: 1
