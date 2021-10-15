@@ -12,7 +12,7 @@ env:
   AKS_CLUSTER_NAME: aks02 # The Azure Kubernetes Cluster
   AKS_RESOURCE_GROUP: aks_group_prd # The Azure Kubernetes Cluster Resource Group
   APP_NAME: example-golang-webapp # App name to be deployed
-  TAG: v0.0.4 # Version tag for the App to be deployed
+  TAG: v0.0.6 # Version tag for the App to be deployed
   REPO: jmspradlin/example-golang-webapp # GitHub Repo to be cloned for Helm Chart
   CHART_PATH: helm/chart # Path to the Helm Chart within the REPO environment
 
