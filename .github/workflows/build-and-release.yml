@@ -3,23 +3,23 @@
 name: Build and Release
 
 env:
+  ENVIRONMENT: prod
   HELM_EXPERIMENTAL_OCI: 1
   HELM_VERSION_TO_INSTALL: 3.6.3
   MAKEFILE_SKIP_AUTH: 1
-  KV_NAME: ltlkeyvault01
+  KV_NAME: ltlkeyvault02
   KV_SECRETS_NAME: 'acrName, acrClientID, acrCredential'
-  AKS_CLUSTER_NAME: aks01
-  AKS_RESOURCE_GROUP: aks_group
+  AKS_CLUSTER_NAME: aks02
+  AKS_RESOURCE_GROUP: aks_group_prd
   APP_NAME: example-golang-webapp
-  TAG: v0.0.4
+  TAG: v0.0.3
   REPO: jmspradlin/example-golang-webapp
   CHART_PATH: helm/chart
 
 on:
-  push:
+  pull_request:
     branches:
-      - main
-      - helm-releases-nonprod
+      - PRD
   release:
     types:
       - prereleased
@@ -29,7 +29,7 @@ jobs:
   Core:
     # https://github.com/actions/virtual-environments
     runs-on: ubuntu-latest
-    environment: dev  
+    environment: ${{ env.ENVIRONMENT }}  
     steps:
       - name: Check out helm-release
         uses: actions/checkout@v1
