@@ -3,23 +3,23 @@
 name: Build and Release
 
 env:
-  ENVIRONMENT: prod
+  ENVIRONMENT: dev
   HELM_EXPERIMENTAL_OCI: 1
   HELM_VERSION_TO_INSTALL: 3.6.3
   MAKEFILE_SKIP_AUTH: 1
-  KV_NAME: ltlkeyvault02
+  KV_NAME: ltlkeyvault01
   KV_SECRETS_NAME: 'acrName, acrClientID, acrCredential'
-  AKS_CLUSTER_NAME: aks02
-  AKS_RESOURCE_GROUP: aks_group_prd
+  AKS_CLUSTER_NAME: aks01
+  AKS_RESOURCE_GROUP: aks_group
   APP_NAME: example-golang-webapp
-  TAG: v0.0.3
+  TAG: v0.0.4
   REPO: jmspradlin/example-golang-webapp
   CHART_PATH: helm/chart
 
 on:
   pull_request:
     branches:
-      - PRD
+      - DEV
   release:
     types:
       - prereleased
