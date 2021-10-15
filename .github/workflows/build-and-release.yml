@@ -95,17 +95,17 @@ jobs:
         run: |
           helm chart export ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ env.TAG }} --destination ./deploy
 
-      # # Deploy to AKS cluster
-      # - name: Deploy to AKS
-      #   run: |
-      #     helm upgrade --install ${{ env.APP_NAME }} ./deploy/${{ env.APP_NAME }}
+      # Deploy to AKS cluster
+      - name: Deploy to AKS
+        run: |
+          helm upgrade --install ${{ env.APP_NAME }} ./deploy/${{ env.APP_NAME }}
 
-      - name: Deploy to AKS cluster
-        uses: Azure/k8s-deploy@v1.4
-        with:
-          namespace: 'default'
-          manifests: |
-            ./deploy/${{ env.APP_NAME }}/templates/deployment.yaml
-          images: '${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ env.TAG }}'
-          strategy: canary
-          percentage: 25
+      # - name: Deploy to AKS cluster
+      #   uses: Azure/k8s-deploy@v1.4
+      #   with:
+      #     namespace: 'default'
+      #     manifests: |
+      #       ./deploy/${{ env.APP_NAME }}/templates/deployment.yaml
+      #     images: '${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ env.TAG }}'
+      #     strategy: canary
+      #     percentage: 25
