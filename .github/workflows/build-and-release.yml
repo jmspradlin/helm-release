@@ -105,7 +105,7 @@ jobs:
         with:
           namespace: 'default'
           manifests: |
-            deployment.yaml
+            ./deployment/deployment.yaml
           images: '${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ env.TAG }}'
           strategy: canary
           percentage: 25
