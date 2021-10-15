@@ -12,7 +12,7 @@ env:
   AKS_CLUSTER_NAME: aks01
   AKS_RESOURCE_GROUP: aks_group
   APP_NAME: example-golang-webapp
-  TAG: v0.0.7
+  TAG: v0.0.6
   REPO: jmspradlin/example-golang-webapp
   CHART_PATH: helm/chart
 
@@ -87,17 +87,7 @@ jobs:
         run: |
           helm chart export ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ env.TAG }} --destination ./deploy
 
-      # # Deploy to AKS cluster
-      # - name: Deploy to AKS
-      #   run: |
-      #     helm upgrade --install ${{ env.APP_NAME }} ./deploy/${{ env.APP_NAME }}
-
-      - name: Deploy to AKS cluster
-        uses: Azure/k8s-deploy@v1.4
-        with:
-          namespace: 'default'
-          manifests: |
-            deployment/${{ env.CHART_PATH }}/deployment.yaml
-          images: '${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ env.TAG }}'
-          strategy: canary
-          percentage: 25
+      # Deploy to AKS cluster
+      - name: Deploy to AKS
+        run: |
+          helm upgrade --install ${{ env.APP_NAME }} ./deploy/${{ env.APP_NAME }}
