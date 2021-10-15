@@ -3,18 +3,18 @@
 name: Build and Release
 
 env:
-  ENVIRONMENT: prod
+  ENVIRONMENT: prod # The GitHub Actions Environment for this release (Available options are 'dev' and 'prod')
   HELM_EXPERIMENTAL_OCI: 1
   HELM_VERSION_TO_INSTALL: 3.6.3
   MAKEFILE_SKIP_AUTH: 1
-  KV_NAME: ltlkeyvault02
-  KV_SECRETS_NAME: 'acrName, acrClientID, acrCredential'
-  AKS_CLUSTER_NAME: aks02
-  AKS_RESOURCE_GROUP: aks_group_prd
-  APP_NAME: example-golang-webapp
-  TAG: v0.0.3
-  REPO: jmspradlin/example-golang-webapp
-  CHART_PATH: helm/chart
+  KV_NAME: ltlkeyvault02 # The Azure Key Vault for this specific environment
+  KV_SECRETS_NAME: 'acrName, acrClientID, acrCredential' # The secrets in the Azure Key Vault for this environment
+  AKS_CLUSTER_NAME: aks02 # The Azure Kubernetes Cluster
+  AKS_RESOURCE_GROUP: aks_group_prd # The Azure Kubernetes Cluster Resource Group
+  APP_NAME: example-golang-webapp # App name to be deployed
+  TAG: v0.0.3 # Version tag for the App to be deployed
+  REPO: jmspradlin/example-golang-webapp # GitHub Repo to be cloned for Helm Chart
+  CHART_PATH: helm/chart # Path to the Helm Chart within the REPO environment
 
 on:
   pull_request:
