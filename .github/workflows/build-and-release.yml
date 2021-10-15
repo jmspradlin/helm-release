@@ -90,10 +90,10 @@ jobs:
         run: |
           helm chart push ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ env.TAG }}
 
-      # # Export chart
-      # - name: Export Helm chart
-      #   run: |
-      #     helm chart export ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ env.TAG }} --destination ./deploy
+      # Export chart
+      - name: Export Helm chart
+        run: |
+          helm chart export ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ env.TAG }} --destination ./deploy
 
       # # Deploy to AKS cluster
       # - name: Deploy to AKS
@@ -105,7 +105,7 @@ jobs:
         with:
           namespace: 'default'
           manifests: |
-            ${{ env.APP_NAME }}/templates/deployment.yaml
+            ./deploy/${{ env.APP_NAME }}/templates/deployment.yaml
           images: '${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ env.TAG }}'
           strategy: canary
           percentage: 25
