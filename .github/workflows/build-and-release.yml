@@ -3,7 +3,6 @@
 name: Build and Release
 
 env:
-  ENVIRONMENT: prod # The GitHub Actions Environment for this release (Available options are 'dev' and 'prod')
   HELM_EXPERIMENTAL_OCI: 1
   HELM_VERSION_TO_INSTALL: 3.6.3
   MAKEFILE_SKIP_AUTH: 1
@@ -29,7 +28,7 @@ jobs:
   Core:
     # https://github.com/actions/virtual-environments
     runs-on: ubuntu-latest
-    environment: ${{ env.ENVIRONMENT }}  
+    environment: prod
     steps:
       - name: Check out helm-release
         uses: actions/checkout@v1
