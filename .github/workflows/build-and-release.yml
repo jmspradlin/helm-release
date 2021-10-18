@@ -3,7 +3,7 @@
 name: Build and Release
 
 env:
-  ENVIRONMENT: DEV
+  ENVIRONMENT: DEV-canary-strategy
   HELM_EXPERIMENTAL_OCI: 1
   HELM_VERSION_TO_INSTALL: 3.6.3
   MAKEFILE_SKIP_AUTH: 1
@@ -12,7 +12,7 @@ env:
   AKS_CLUSTER_NAME: aksdev
   AKS_RESOURCE_GROUP: aks_group_dev
   APP_NAME: example-golang-webapp
-  TAG: v0.0.8
+  TAG: DEV
   REPO: jmspradlin/example-golang-webapp
   CHART_PATH: helm/chart
 
