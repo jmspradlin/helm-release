@@ -16,6 +16,7 @@ env:
   TAG: DEV
   REPO: jmspradlin/example-golang-webapp
   CHART_PATH: helm/chart
+  CHART_TAG: "v0.0.1"
 
 on:
   pull_request:
@@ -94,17 +95,17 @@ jobs:
       # # Save chart
       - name: Save Helm chart
         run: |
-          helm chart save ./deployment/${{ env.CHART_PATH }}/ ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ steps.chartVersion.outputs.chartVersion }}
+          helm chart save ./deployment/${{ env.CHART_PATH }}/ ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ env.CHART_TAG }}
 
       # # Save chart
       - name: Push Helm chart
         run: |
-          helm chart push ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ steps.chartVersion.outputs.chartVersion }}
+          helm chart push ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ env.CHART_TAG }}
 
       # Export chart
       - name: Export Helm chart
         run: |
-          helm chart export ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ steps.chartVersion.outputs.chartVersion }} --destination ./deploy
+          helm chart export ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ env.CHART_TAG }} --destination ./deploy
 
       # Deploy to AKS cluster
       - name: Deploy to AKS
@@ -117,6 +118,6 @@ jobs:
       #     namespace: 'default'
       #     manifests: |
       #       ./deploy/${{ env.APP_NAME }}/templates/deployment.yaml
-      #     images: '${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ steps.chartVersion.outputs.chartVersion }}'
+      #     images: '${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ env.CHART_TAG }}'
       #     strategy: canary
       #     percentage: 25
