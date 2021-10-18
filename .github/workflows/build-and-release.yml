@@ -3,16 +3,16 @@
 name: Build and Release
 
 env:
-  ENVIRONMENT: DEV # Specifies the helm-release branch to deploy on
+  ENVIRONMENT: DEV-example-golang-webapp
   HELM_EXPERIMENTAL_OCI: 1
   HELM_VERSION_TO_INSTALL: 3.6.3
   MAKEFILE_SKIP_AUTH: 1
-  KV_NAME: ltlkeyvault01
+  KV_NAME: helmdeploydev
   KV_SECRETS_NAME: 'acrName, acrClientID, acrCredential'
-  AKS_CLUSTER_NAME: aks01
-  AKS_RESOURCE_GROUP: aks_group
+  AKS_CLUSTER_NAME: aksdev
+  AKS_RESOURCE_GROUP: aks_group_dev
   APP_NAME: example-golang-webapp
-  TAG: v0.0.7
+  TAG: v0.0.8
   REPO: jmspradlin/example-golang-webapp
   CHART_PATH: helm/chart
 
