@@ -48,7 +48,7 @@ jobs:
       # Get Chart.yaml Version
       - name: Read Chart Version
         id: chartVersion
-        run: echo ::set-output name=version::$(grep 'Version:' deployment/helm/chart/Chart.yaml | cut -d" " -f2)
+        run: echo ::set-output name=chartVersion::$(grep 'Version:' deployment/helm/chart/Chart.yaml | cut -d" " -f2)
       
       # Get Chart.yaml AppVersion
       - name: Read Chart appVersion
@@ -94,17 +94,17 @@ jobs:
       # # Save chart
       - name: Save Helm chart
         run: |
-          helm chart save ./deployment/${{ env.CHART_PATH }}/ ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ steps.chartVersion.outputs.Version }}
+          helm chart save ./deployment/${{ env.CHART_PATH }}/ ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ steps.chartVersion.outputs.chartVersion }}
 
       # # Save chart
       - name: Push Helm chart
         run: |
-          helm chart push ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ steps.chartVersion.outputs.Version }}
+          helm chart push ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ steps.chartVersion.outputs.chartVersion }}
 
       # Export chart
       - name: Export Helm chart
         run: |
-          helm chart export ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ steps.chartVersion.outputs.Version }} --destination ./deploy
+          helm chart export ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ steps.chartVersion.outputs.chartVersion }} --destination ./deploy
 
       # Deploy to AKS cluster
       - name: Deploy to AKS
@@ -117,6 +117,6 @@ jobs:
       #     namespace: 'default'
       #     manifests: |
       #       ./deploy/${{ env.APP_NAME }}/templates/deployment.yaml
-      #     images: '${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ steps.chartVersion.outputs.Version }}'
+      #     images: '${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ steps.chartVersion.outputs.chartVersion }}'
       #     strategy: canary
       #     percentage: 25
