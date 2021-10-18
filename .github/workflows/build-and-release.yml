@@ -3,7 +3,7 @@
 name: Build and Release
 
 env:
-  ENVIRONMENT: DEV-canary-strategy
+  HELM_RELEASE_BRANCH: DEV-canary-strategy
   HELM_EXPERIMENTAL_OCI: 1
   HELM_VERSION_TO_INSTALL: 3.6.3
   MAKEFILE_SKIP_AUTH: 1
@@ -12,6 +12,7 @@ env:
   AKS_CLUSTER_NAME: aksdev
   AKS_RESOURCE_GROUP: aks_group_dev
   APP_NAME: example-golang-webapp
+  APP_VERSION: ""
   TAG: DEV
   REPO: jmspradlin/example-golang-webapp
   CHART_PATH: helm/chart
@@ -34,7 +35,7 @@ jobs:
       - name: Check out helm-release
         uses: actions/checkout@v1
         with:
-          ref: ${{ env.ENVIRONMENT }}
+          ref: ${{ env.HELM_RELEASE_BRANCH }}
 
       - name: Check out deployment code
         uses: actions/checkout@v2
@@ -43,6 +44,16 @@ jobs:
           path: deployment
           token: ${{ secrets.GHA_PAT }}
           ref: ${{ env.TAG }}
+      
+      # Get Chart.yaml Version
+      - name: Read Chart Version
+        id: chartVersion
+        run: echo ::set-output name=version::$(grep 'Version:' deployment/helm/chart/Chart.yaml | cut -d" " -f2)
+      
+      # Get Chart.yaml AppVersion
+      - name: Read Chart appVersion
+        id: chartAppVersion
+        run: echo ::set-output name=appVersion::$(grep 'appVersion:' deployment/helm/chart/Chart.yaml | cut -d" " -f2)
 
       # Install Helm
       - name: Setup Helm
@@ -83,17 +94,17 @@ jobs:
       # # Save chart
       - name: Save Helm chart
         run: |
-          helm chart save ./deployment/${{ env.CHART_PATH }}/ ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ env.TAG }}
+          helm chart save ./deployment/${{ env.CHART_PATH }}/ ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ steps.chartVersion.outputs.Version }}
 
       # # Save chart
       - name: Push Helm chart
         run: |
-          helm chart push ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ env.TAG }}
+          helm chart push ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ steps.chartVersion.outputs.Version }}
 
       # Export chart
       - name: Export Helm chart
         run: |
-          helm chart export ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ env.TAG }} --destination ./deploy
+          helm chart export ${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ steps.chartVersion.outputs.Version }} --destination ./deploy
 
       # Deploy to AKS cluster
       - name: Deploy to AKS
@@ -106,6 +117,6 @@ jobs:
       #     namespace: 'default'
       #     manifests: |
       #       ./deploy/${{ env.APP_NAME }}/templates/deployment.yaml
-      #     images: '${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ env.TAG }}'
+      #     images: '${{ steps.getKvSecrets.outputs.acrName }}.azurecr.io/helm/${{ env.APP_NAME }}:${{ steps.chartVersion.outputs.Version }}'
       #     strategy: canary
       #     percentage: 25
