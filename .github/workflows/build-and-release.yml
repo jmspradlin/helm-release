@@ -3,20 +3,25 @@
 name: Build and Release
 
 env:
-  HELM_RELEASE_BRANCH: DEV-canary-strategy
+  # Local Helm variables
+  HELM_RELEASE_BRANCH: DEV-canary-strategy # Branch of the helm-release repo
+  # App variables
+  REPO: jmspradlin/example-golang-webapp # APP Repo to be checked out of Github
+  APP_NAME: example-golang-webapp # Name of the app to be released using helm
+  TAG: DEV # APP branch name to be checked out of Github
+  # Remote Helm chart variables
+  CHART_PATH: helm/chart # Path in the APP repo to the Chart.yaml file
+  CHART_TAG: "v0.0.1" # Helm Chart version (should match 'version' in Chart.yaml)
+  # Azure variables
+  KV_NAME: helmdeploydev # Name of the Key Vault for this deployment
+  KV_SECRETS_NAME: 'acrName, acrClientID, acrCredential' # Name of the secrets as they appear in Azure Key Vault
+  AKS_CLUSTER_NAME: aksdev # AKS cluster name
+  AKS_RESOURCE_GROUP: aks_group_dev # AKS Cluster Resource Group
+  # default environmental variables
   HELM_EXPERIMENTAL_OCI: 1
   HELM_VERSION_TO_INSTALL: 3.6.3
   MAKEFILE_SKIP_AUTH: 1
-  KV_NAME: helmdeploydev
-  KV_SECRETS_NAME: 'acrName, acrClientID, acrCredential'
-  AKS_CLUSTER_NAME: aksdev
-  AKS_RESOURCE_GROUP: aks_group_dev
-  APP_NAME: example-golang-webapp
-  APP_VERSION: ""
-  TAG: DEV
-  REPO: jmspradlin/example-golang-webapp
-  CHART_PATH: helm/chart
-  CHART_TAG: "v0.0.1"
+
 
 on:
   pull_request:
