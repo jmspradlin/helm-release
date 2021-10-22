@@ -11,7 +11,7 @@ env:
   TAG: DEV # APP branch name to be checked out of Github
   # Remote Helm chart variables
   CHART_PATH: helm/chart # Path in the APP repo to the Chart.yaml file
-  CHART_TAG: "v0.0.1" # Helm Chart version (should match 'version' in Chart.yaml)
+  CHART_TAG: "v0.0.7" # Helm Chart version (should match 'version' in Chart.yaml)
   # Azure variables
   KV_NAME: helmdeploydev # Name of the Key Vault for this deployment
   KV_SECRETS_NAME: 'acrName, acrClientID, acrCredential' # Name of the secrets as they appear in Azure Key Vault
