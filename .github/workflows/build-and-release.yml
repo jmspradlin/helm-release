@@ -72,7 +72,7 @@ jobs:
       - name: Azure login
         uses: Azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS02 }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       # Get KV Secrets for this deployment
       - name: Azure Key Vault Get Secrets
@@ -93,7 +93,7 @@ jobs:
       - name: Set AKS Context
         uses: Azure/aks-set-context@v1
         with:
-          creds: '${{ secrets.AZURE_CREDENTIALS02 }}'
+          creds: '${{ secrets.AZURE_CREDENTIALS }}'
           cluster-name: ${{ env.AKS_CLUSTER_NAME }}
           resource-group: ${{ env.AKS_RESOURCE_GROUP }}
 
